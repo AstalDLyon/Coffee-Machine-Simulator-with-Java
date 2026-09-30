@@ -35,7 +35,11 @@ public class CoffeeMachine {
                 case "buy": // feito, falta testar
                     System.out.println("What do you want to buy? 1 - espresso, 2 - latte, 3 - cappuccino, back - to main menu:");
                     String coffeeChoice = scanner.next();
-                    if ((machineWater >= 200) && (machineCoffee >= 12) && (machineMilk >= 75) && (disposableCups >= 1)){
+                    if (coffeeChoice.equals("back")) {
+                        break;
+                    }
+
+                    if (machineIsFull()){
                         switch (coffeeChoice){
                             case "1":
                                 espressoCoffee();
@@ -46,10 +50,9 @@ public class CoffeeMachine {
                             case "3":
                                 cappuccinoCoffee();
                                 break;
-                            case  "back":
-                                break;
                             default:
                                 System.out.println("Is not a option");
+                                continue;
                         }
                         System.out.println("I have enough resources, making you a coffee!");
                     } else {
@@ -87,6 +90,15 @@ public class CoffeeMachine {
                     System.out.println("Não reconhecivel");
             }
         }
+    }
+    public static boolean machineIsFull(){
+        boolean isFull;
+        if ((machineWater >= 200) && (machineCoffee >= 12) && (machineMilk >= 75) && (disposableCups >= 1)){
+               isFull = true;
+        } else {
+            isFull = false;
+        }
+        return isFull;
     }
     public static void showData(){
         System.out.println("The coffee machine has:");
