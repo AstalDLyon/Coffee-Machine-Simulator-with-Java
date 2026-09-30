@@ -39,7 +39,7 @@ public class CoffeeMachine {
                         break;
                     }
 
-                    if (machineIsFull()){
+                    if (hasEnoughResources(coffeeChoice)){
                         switch (coffeeChoice){
                             case "1":
                                 espressoCoffee();
@@ -55,17 +55,7 @@ public class CoffeeMachine {
                                 continue;
                         }
                         System.out.println("I have enough resources, making you a coffee!");
-                    } else {
-                        if (machineWater < 200){
-                            System.out.println("Sorry, not enough water!");
-                        } else if ( machineMilk < 75){
-                            System.out.println("Sorry, not enough milk!");
-                        } else if (machineCoffee < 12){
-                            System.out.println("Sorry, not enough coffee beans!");
-                        } else {
-                            System.out.println("Sorry, not enough disposable cups!");
-                        }
-                }
+                    }
                     break;
                 case "fill": // feito, falta teste
                     System.out.println("Write how many ml of water you want to add:");
@@ -91,14 +81,48 @@ public class CoffeeMachine {
             }
         }
     }
-    public static boolean machineIsFull(){
-        boolean isFull;
-        if ((machineWater >= 200) && (machineCoffee >= 12) && (machineMilk >= 75) && (disposableCups >= 1)){
-               isFull = true;
-        } else {
-            isFull = false;
+    public static boolean hasEnoughResources(String choice) {
+        int neededWater = 0;
+        int neededMilk = 0;
+        int neededCoffee = 0;
+
+        switch (choice) {
+            case "1": // Espresso
+                neededWater = 250;
+                neededCoffee = 16;
+                break;
+            case "2": // Latte
+                neededWater = 350;
+                neededMilk = 75;
+                neededCoffee = 20;
+                break;
+            case "3": // Cappuccino
+                neededWater = 200;
+                neededMilk = 100;
+                neededCoffee = 12;
+                break;
+            default:
+                return true; // Deixa passar para o switch principal, que vai exibir o erro de opção inválida
         }
-        return isFull;
+
+        if (machineWater < neededWater) {
+            System.out.println("Sorry, not enough water!");
+            return false;
+        }
+        if (machineMilk < neededMilk) {
+            System.out.println("Sorry, not enough milk!");
+            return false;
+        }
+        if (machineCoffee < neededCoffee) {
+            System.out.println("Sorry, not enough coffee beans!");
+            return false;
+        }
+        if (disposableCups < 1) {
+            System.out.println("Sorry, not enough disposable cups!");
+            return false;
+        }
+
+        return true;
     }
     public static void showData(){
         System.out.println("The coffee machine has:");
@@ -148,27 +172,4 @@ public class CoffeeMachine {
         machineCoffee += coffee;
         disposableCups += cups;
     }
-    /*public static String cupCalculations(int quantity){
-        int cupsAvailable = 0;
-        // molde para cada tipo de café
-        //espresso
-        int espressoWater = 250;
-        int espressoCoffee = 16;
-        int espressoCost = 4;
-
-        while ((machineWater >= WATERRECIPE) && (machineMilk >= MILKRECIPE ) && (machineCoffee >= COFFEERECIPE)){
-            disposableCups--;
-            machineWater -= espressoWater;
-            machineCoffee -= espressoCoffee;
-        }
-        if (quantity > cupsAvailable){ // feito
-            return String.format("No, I can make only %d cup(s) of coffee\n",cupsAvailable);
-
-        } else if (quantity == cupsAvailable){
-                return "Yes, i can make that amount of coffee";
-        } else {
-            cupsAvailable -= quantity;
-            return String.format("Yes, I can make that amount of coffee (and even %d more than that)", cupsAvailable);
-        }
-    }*/
 }
