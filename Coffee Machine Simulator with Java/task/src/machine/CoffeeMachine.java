@@ -18,6 +18,9 @@ public class CoffeeMachine {
     public static int machineCoffee;
     public static int disposableCups;
     public static int moneyInMachine;
+    public static int usageCount = 0;
+    public static boolean cleaningTime = false;
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         machineWater = 400;
@@ -29,16 +32,22 @@ public class CoffeeMachine {
         //System.out.println(cupCalculations(quantity));
         String userInput ="";
         while(!userInput.equals("exit")){
-            System.out.println("Write action (buy, fill, take, remaining, exit)");
+            System.out.println("Write action (buy, fill, take, clean, remaining, exit)");
             userInput = scanner.next().toLowerCase().trim();
             switch (userInput){
                 case "buy": // feito, falta testar
+                    if(usageCount >= 10){ // problema de inversão que não trava realmente, talvez um uso de ENUM;
+                        cleaningTime = true;
+                    }
+                    if (cleaningTime){
+                        System.out.println("I need cleaning!");
+                        break;
+                    }
                     System.out.println("What do you want to buy? 1 - espresso, 2 - latte, 3 - cappuccino, back - to main menu:");
                     String coffeeChoice = scanner.next();
                     if (coffeeChoice.equals("back")) {
                         break;
                     }
-
                     if (hasEnoughResources(coffeeChoice)){
                         switch (coffeeChoice){
                             case "1":
@@ -54,6 +63,7 @@ public class CoffeeMachine {
                                 System.out.println("Is not a option");
                                 continue;
                         }
+                        usageCount++;
                         System.out.println("I have enough resources, making you a coffee!");
                     }
                     break;
@@ -68,11 +78,16 @@ public class CoffeeMachine {
                     int cups = scanner.nextInt();
                     fillTheMachine(water, milk, coffee, cups);
                     break;
-                case "take": // feito, falta teste
+                case "take": // feito.
                     emptyMoneyInMachine();
                     break;
-                case "remaining": //feito, falta teste
+                case "remaining": //feito.
                     showData();
+                    break;
+                case "clean":// feito.
+                    cleaningTime = false;
+                    usageCount = 0;
+                    System.out.println("I have been cleaned!");
                     break;
                 case "exit":
                     break;
@@ -81,6 +96,11 @@ public class CoffeeMachine {
             }
         }
     }
+
+    /*public static boolean setCleaningTime(){
+        cleaningTime = !cleaningTime;
+        return  cleaningTime;
+    }*/
     public static boolean hasEnoughResources(String choice) {
         int neededWater = 0;
         int neededMilk = 0;
